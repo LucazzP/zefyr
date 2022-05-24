@@ -139,7 +139,7 @@ class ZefyrThemeData {
 
     final inlineCodeStyle = TextStyle(
       fontSize: 14,
-      color: themeData.colorScheme.primaryVariant.withOpacity(0.8),
+      color: themeData.colorScheme.primary.withOpacity(0.8),
       fontFamily: fontFamily,
     );
 
@@ -163,7 +163,7 @@ class ZefyrThemeData {
         ),
       ),
       link: TextStyle(
-        color: themeData.colorScheme.primaryVariant,
+        color: themeData.colorScheme.primary,
         decoration: TextDecoration.underline,
       ),
       paragraph: TextBlockTheme(

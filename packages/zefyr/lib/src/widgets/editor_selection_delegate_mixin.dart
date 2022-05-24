@@ -6,28 +6,24 @@ import 'package:zefyr/util.dart';
 
 import 'editor.dart';
 
-mixin RawEditorStateSelectionDelegateMixin on EditorState
-    implements TextSelectionDelegate {
+mixin RawEditorStateSelectionDelegateMixin on EditorState implements TextSelectionDelegate {
   @override
   TextEditingValue get textEditingValue {
     return widget.controller.plainTextEditingValue;
   }
 
   @override
-  set textEditingValue(TextEditingValue value) {
+  void userUpdateTextEditingValue(TextEditingValue value, SelectionChangedCause cause) {
     final cursorPosition = value.selection.extentOffset;
     final oldText = widget.controller.document.toPlainText();
     final newText = value.text;
     final diff = fastDiff(oldText, newText, cursorPosition);
     widget.controller.replaceText(
-        diff.start, diff.deleted.length, diff.inserted,
-        selection: value.selection);
-  }
-
-  @override
-  void userUpdateTextEditingValue(
-      TextEditingValue value, SelectionChangedCause cause) {
-    textEditingValue = value;
+      diff.start,
+      diff.deleted.length,
+      diff.inserted,
+      selection: value.selection,
+    );
   }
 
   @override
@@ -68,8 +64,7 @@ mixin RawEditorStateSelectionDelegateMixin on EditorState
 
     additionalOffset = expandedRect.height >= editableSize.height
         ? editableSize.height / 2 - expandedRect.center.dy
-        : 0.0
-            .clamp(expandedRect.bottom - editableSize.height, expandedRect.top);
+        : 0.0.clamp(expandedRect.bottom - editableSize.height, expandedRect.top);
     unitOffset = const Offset(0, 1);
 
     // No overscrolling when encountering tall fonts/scripts that extend past
@@ -80,8 +75,7 @@ mixin RawEditorStateSelectionDelegateMixin on EditorState
     );
 
     final offsetDelta = scrollController.offset - targetOffset;
-    return RevealedOffset(
-        rect: rect.shift(unitOffset * offsetDelta), offset: targetOffset);
+    return RevealedOffset(rect: rect.shift(unitOffset * offsetDelta), offset: targetOffset);
   }
 
   @override
